@@ -16,7 +16,7 @@ class CustomDrawer extends StatelessWidget {
               child: ListView(
                 children: <Widget>[
                   ListTile(
-                    leading: const Icon(Icons.person),
+                    leading: const Icon(Icons.home),
                     title: const Text("Home"),
                     onTap: () {
                       Navigator.push(

@@ -45,17 +45,15 @@ class _ProductListState extends State<ProductList> {
       }
     });
     return Scaffold(
-      body: ListView.separated(
+      body: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12),
         padding: const EdgeInsets.all(12),
         controller: _scrollController,
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: productList.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          return ProductCard(
-            product: productList[index],
-          );
-        },
+        itemBuilder: (context, index) =>
+            ProductCard(product: productList[index]),
       ),
       bottomNavigationBar: Visibility(
           visible: _isLoading, child: const LinearProgressIndicator()),
