@@ -15,14 +15,15 @@ class GenericPage extends StatelessWidget {
         centerTitle: true,
         title: Text(pageName),
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(pageIcon),
-          Text(pageName),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(pageIcon),
+            Text(pageName),
+          ],
+        ),
       ),
     );
   }
