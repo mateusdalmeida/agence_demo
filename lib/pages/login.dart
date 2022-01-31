@@ -1,5 +1,7 @@
 import 'package:agence/pages/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -73,7 +75,71 @@ class Login extends StatelessWidget {
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(16),
-                        child: Center(child: Text("Esqueci minha senha")),
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text("Esqueci minha senha")),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 32),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Expanded(child: Divider()),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text("ou"),
+                          ),
+                          Expanded(child: Divider())
+                        ],
+                      ),
+                    ),
+                    Center(
+                      child: SignInButton(
+                        Buttons.Facebook,
+                        text: "Entrar com Facebook",
+                        onPressed: () async {
+                          final LoginResult result =
+                              await FacebookAuth.instance.login();
+
+                          if (result.status == LoginStatus.success) {
+                            final AccessToken accessToken = result.accessToken!;
+
+                            final userData =
+                                await FacebookAuth.instance.getUserData();
+
+                            var snackBar = SnackBar(
+                              content: Text('Bem vindo ' + userData['name']),
+                              behavior: SnackBarBehavior.floating,
+                            );
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Home()),
+                            );
+                          } else {
+                            var snackBar = SnackBar(
+                              content: Text(result.message!),
+                              behavior: SnackBarBehavior.floating,
+                            );
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                            print(result.status);
+                            print(result.message);
+                          }
+                        },
+                      ),
+                    ),
+                    Center(
+                      child: SignInButton(
+                        Buttons.Google,
+                        text: "Entrar com Google",
+                        onPressed: () {},
                       ),
                     )
                   ],
