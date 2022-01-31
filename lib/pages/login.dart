@@ -1,4 +1,5 @@
 import 'package:agence/pages/home/home.dart';
+import 'package:agence/widgets/generic_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -111,18 +112,12 @@ class Login extends StatelessWidget {
                               await FacebookAuth.instance.login();
 
                           if (result.status == LoginStatus.success) {
-                            final AccessToken accessToken = result.accessToken!;
-
                             final userData =
                                 await FacebookAuth.instance.getUserData();
 
-                            var snackBar = SnackBar(
-                              content: Text('Bem vindo ' + userData['name']),
-                              behavior: SnackBarBehavior.floating,
-                            );
-
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                            showSnackBar(
+                                context: context,
+                                message: 'Bem vindo ' + userData['name']);
 
                             Navigator.pushReplacement(
                               context,
@@ -130,13 +125,11 @@ class Login extends StatelessWidget {
                                   builder: (context) => const Home()),
                             );
                           } else {
-                            var snackBar = SnackBar(
-                              content: Text(result.message!),
-                              behavior: SnackBarBehavior.floating,
-                            );
+                            showSnackBar(
+                                context: context,
+                                message:
+                                    "Houve um erro no login, tente novamente");
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
                             print(result.status);
                             print(result.message);
                           }
@@ -150,33 +143,23 @@ class Login extends StatelessWidget {
                         onPressed: () async {
                           try {
                             await _googleSignIn.signIn();
-                            print(_googleSignIn.currentUser);
 
-                            var snackBar = SnackBar(
-                              content: Text('Bem vindo ' +
-                                  _googleSignIn.currentUser!.displayName!),
-                              behavior: SnackBarBehavior.floating,
-                            );
-
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
+                            showSnackBar(
+                                context: context,
+                                message: 'Bem vindo ' +
+                                    _googleSignIn.currentUser!.displayName!);
 
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const Home()),
                             );
-                            print("deu bom");
                           } catch (error) {
-                            var snackBar = const SnackBar(
-                              content: Text(
-                                  "Houve um erro no login, tente novamente"),
-                              behavior: SnackBarBehavior.floating,
-                            );
+                            showSnackBar(
+                                context: context,
+                                message:
+                                    "Houve um erro no login, tente novamente");
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                            print("deu ruim");
                             print(error);
                           }
                         },
