@@ -18,6 +18,7 @@ class MapView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GoogleMap(
       initialCameraPosition: _brazilCoordinates,
+      myLocationEnabled: true,
       onMapCreated: (GoogleMapController controller) async {
         _controller.complete(controller);
         await getLocationPermission();
