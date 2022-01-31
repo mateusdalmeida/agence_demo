@@ -2,6 +2,14 @@ import 'package:agence/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: [
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -139,7 +147,39 @@ class Login extends StatelessWidget {
                       child: SignInButton(
                         Buttons.Google,
                         text: "Entrar com Google",
-                        onPressed: () {},
+                        onPressed: () async {
+                          try {
+                            await _googleSignIn.signIn();
+                            print(_googleSignIn.currentUser);
+
+                            var snackBar = SnackBar(
+                              content: Text('Bem vindo ' +
+                                  _googleSignIn.currentUser!.displayName!),
+                              behavior: SnackBarBehavior.floating,
+                            );
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Home()),
+                            );
+                            print("deu bom");
+                          } catch (error) {
+                            var snackBar = const SnackBar(
+                              content: Text(
+                                  "Houve um erro no login, tente novamente"),
+                              behavior: SnackBarBehavior.floating,
+                            );
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                            print("deu ruim");
+                            print(error);
+                          }
+                        },
                       ),
                     )
                   ],
