@@ -21,7 +21,7 @@ class Product extends StatelessWidget {
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.3,
-              child: const MapView(),
+              child: MapView(),
             ),
             Row(
               children: [
