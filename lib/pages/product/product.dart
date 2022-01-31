@@ -1,5 +1,6 @@
 import 'package:agence/models/product_model.dart';
 import 'package:agence/pages/home/home.dart';
+import 'package:agence/pages/product/widgets/map_view.dart';
 import 'package:agence/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +21,7 @@ class Product extends StatelessWidget {
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.3,
-              child: const Center(
-                child: Text("MAPA"),
-              ),
+              child: const MapView(),
             ),
             Row(
               children: [

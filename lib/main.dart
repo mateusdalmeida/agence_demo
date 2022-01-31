@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
       ),
       themeMode: ThemeMode.system,
-      home: const Login(),
+      home: const Home(),
     );
   }
 }
