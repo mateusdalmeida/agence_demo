@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class MapView extends StatelessWidget {
   final Completer<GoogleMapController> _controller = Completer();
@@ -19,14 +20,42 @@ class MapView extends StatelessWidget {
       initialCameraPosition: _brazilCoordinates,
       onMapCreated: (GoogleMapController controller) async {
         _controller.complete(controller);
-        await Future.delayed(const Duration(seconds: 3));
+        await getLocationPermission();
 
-        controller
-            .animateCamera(CameraUpdate.newCameraPosition(const CameraPosition(
-          target: LatLng(-6.079218760533462, -49.88386273237121),
+        Location location = Location();
+
+        LocationData _locationData;
+
+        _locationData = await location.getLocation();
+
+        controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: LatLng(_locationData.latitude!, _locationData.longitude!),
           zoom: 14,
         )));
       },
     );
+  }
+}
+
+Future<void> getLocationPermission() async {
+  Location location = Location();
+
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
+
+  _serviceEnabled = await location.serviceEnabled();
+  if (!_serviceEnabled) {
+    _serviceEnabled = await location.requestService();
+    if (!_serviceEnabled) {
+      return;
+    }
+  }
+
+  _permissionGranted = await location.hasPermission();
+  if (_permissionGranted == PermissionStatus.denied) {
+    _permissionGranted = await location.requestPermission();
+    if (_permissionGranted != PermissionStatus.granted) {
+      return;
+    }
   }
 }
