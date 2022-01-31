@@ -2,6 +2,15 @@ import 'package:agence/pages/generic_page.dart';
 import 'package:agence/pages/home/home.dart';
 import 'package:agence/pages/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: [
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -79,7 +88,20 @@ class CustomDrawer extends StatelessWidget {
                       leading: const Icon(Icons.exit_to_app),
                       title: const Text("Sair"),
                       onTap: () async {
-                        print("logout");
+                        bool isgoogleSignedIn =
+                            await _googleSignIn.isSignedIn();
+
+                        final AccessToken? facebookAccessToken =
+                            await FacebookAuth.instance.accessToken;
+
+                        if (facebookAccessToken != null) {
+                          await FacebookAuth.instance.logOut();
+                        }
+
+                        if (isgoogleSignedIn) {
+                          _googleSignIn.signOut();
+                        }
+
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => const Login()),
